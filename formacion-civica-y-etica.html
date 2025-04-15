@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libros de Formacion Cívica y Ética</title>
+  <link rel="stylesheet" href="/styles/styles_categorias.css">  
+  
+</head>
+<body>
+  <h1>Libros de Formación Cívica y Ética</h1>
+  <table id="tablaLibros">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Autor</th>
+        <th>Editorial</th>
+        <th>Ver PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Aquí se insertan los libros -->
+    </tbody>
+  </table>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+      authDomain: "btec28-143cf.firebaseapp.com",
+      projectId: "btec28-143cf",
+      storageBucket: "btec28-143cf.appspot.com",
+      messagingSenderId: "227942226048",
+      appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+      measurementId: "G-KMRHX6SZWN"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function cargarLibrosFCE() {
+      const tabla = document.querySelector("#tablaLibros tbody");
+      tabla.innerHTML = "";
+
+      try {
+        const querySnapshot = await db.collection("libros")
+          .where("categoria", "==", "Formacion Civica y Etica")
+          .get();
+
+        if (querySnapshot.empty) {
+          tabla.innerHTML = "<tr><td colspan='4'>No hay libros de Formación Cívica y Ética disponibles.</td></tr>";
+        }
+
+        querySnapshot.forEach(doc => {
+          const libro = doc.data();
+          const fila = `
+            <tr>
+              <td>${libro.nombre}</td>
+              <td>${libro.autor}</td>
+              <td>${libro.editorial}</td>
+              <td><a href="${libro.archivoURL}" target="_blank" class="boton">Ver PDF</a></td>
+            </tr>
+          `;
+          tabla.innerHTML += fila;
+        });
+      } catch (error) {
+        console.error("Error al cargar libros:", error);
+        tabla.innerHTML = "<tr><td colspan='4'>Error al cargar los libros.</td></tr>";
+      }
+    }
+
+    cargarLibrosFCE();
+  </script>
+</body>
+</html>

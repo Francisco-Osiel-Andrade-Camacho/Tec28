@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital Tec28</title>
+    <link rel="icon" href="./images/tec28.png" type="image/png">
+    <link rel="stylesheet" href="./styles/styles_rec.css">
+    <script src="script.js" defer></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+            authDomain: "btec28-143cf.firebaseapp.com",
+            projectId: "btec28-143cf",
+            storageBucket: "btec28-143cf.firebasestorage.app",
+            messagingSenderId: "227942226048",
+            appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+            measurementId: "G-KMRHX6SZWN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchBooks() {
+            const bookList = document.getElementById("book-list");
+            bookList.innerHTML = ""; // Limpiar contenido antes de cargar
+
+            const querySnapshot = await getDocs(collection(db, "categorias"));
+            querySnapshot.forEach((doc) => {
+                const book = doc.data();
+
+                const formattedTitle = book.titulo
+                    .toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\s+/g, "-") + ".html";
+
+                const bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+
+                bookCard.innerHTML = `
+                    <a href="${formattedTitle}">
+                        <img src="${book.portada}" alt="${book.titulo}">
+                        <h3>${book.titulo}</h3>
+                    </a>
+                `;
+
+                bookList.appendChild(bookCard);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchBooks);
+    </script>
+</head>
+<body>
+
+    <div id="header-placeholder"></div>
+    <main>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Buscar libros..." class="search-input">
+            <button id="search-button" class="search-button">Buscar</button>
+        </div>
+
+    </main>
+
+    <section class="book-container" id="book-list">
+    </section>
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>

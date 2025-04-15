@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="icon" href="./images/tec28.png" type="image/png">
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <link rel="stylesheet" href="./styles/styles_is.css">
+    
+</head>
+<body>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="id" placeholder="ID">
+        <input type="password" id="password" placeholder="Contraseña">
+        
+        <label [href]="/condiciones.html" class="checkbox-container">
+            <input type="checkbox" id="termsCheckbox">Acepto las <a href="condiciones.html" target="_blank">condiciones de uso</a>
+        </label>
+
+        <button id="loginButton" disabled>Iniciar sesión</button>
+        
+        <p id="message"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+            authDomain: "btec28-143cf.firebaseapp.com",
+            projectId: "btec28-143cf",
+            storageBucket: "btec28-143cf.firebasestorage.app",
+            messagingSenderId: "227942226048",
+            appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+            measurementId: "G-KMRHX6SZWN"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const loginButton = document.getElementById("loginButton");
+        const checkbox = document.getElementById("termsCheckbox");
+        const message = document.getElementById("message");
+
+        // Habilitar o deshabilitar el botón cuando el checkbox cambie
+        checkbox.addEventListener("change", function() {
+            loginButton.disabled = !this.checked;
+            if (this.checked) {
+                message.style.display = "none"; // Ocultar mensaje de error si el checkbox se marca
+            }
+        });
+
+        loginButton.addEventListener("click", login);
+
+        async function login() {
+            const id = document.getElementById("id").value;
+            const password = document.getElementById("password").value;
+
+            // Verificar si el checkbox está marcado
+            if (!checkbox.checked) {
+                message.textContent = "Debes aceptar los términos y condiciones.";
+                message.style.color = "red";
+                message.style.display = "block";
+                return;
+            }
+
+            if (!id || !password) {
+                message.textContent = "Por favor ingresa tu ID y contraseña.";
+                message.style.color = "red";
+                message.style.display = "block";
+                return;
+            }
+
+            try {
+                // Buscar usuario en Firestore
+                const usuariosRef = collection(db, "usuarios");
+                const q = query(usuariosRef, where("id", "==", id));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    message.textContent = "ID no encontrado.";
+                    message.style.color = "red";
+                    message.style.display = "block";
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        const user = doc.data();
+                        if (user.contraseña === password) {
+                            message.textContent = "Inicio de sesión exitoso";
+                            message.style.color = "green";
+                            message.style.display = "block";
+                            window.location.href = "./Home.html"; // Redirigir a la página principal
+                        } else {
+                            message.textContent = "Contraseña incorrecta.";
+                            message.style.color = "red";
+                            message.style.display = "block";
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error al obtener los datos:", error);
+                message.textContent = "Error al iniciar sesión.";
+                message.style.color = "red";
+                message.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

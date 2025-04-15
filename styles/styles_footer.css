@@ -1,0 +1,27 @@
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+#creditos-btn {
+    background-color: beige;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+#creditos-btn:hover {
+    background-color: #ffdb4d;
+}

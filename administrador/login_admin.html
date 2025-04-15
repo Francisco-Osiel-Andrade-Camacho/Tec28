@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administrador Tec28</title>
+  <link rel="icon" href="/images/tec28.png" type="image/png">
+  <link rel="stylesheet" href="./css/style_login.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Administrador</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="usuarioadmin">Usuario</label>
+        <input type="text" id="usuarioadmin" required />
+      </div>
+      <div class="input-group">
+        <label for="contraseñaadmin">Contraseña</label>
+        <input type="password" id="contraseñaadmin" required />
+      </div>
+      <button type="submit" class="btn">Iniciar Sesión</button>
+      <p id="mensajeError"></p>
+    </form>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+      authDomain: "btec28-143cf.firebaseapp.com",
+      projectId: "btec28-143cf",
+      storageBucket: "btec28-143cf.appspot.com",
+      messagingSenderId: "227942226048",
+      appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+      measurementId: "G-KMRHX6SZWN"
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      const form = document.getElementById("loginForm");
+      const mensajeError = document.getElementById("mensajeError");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const usuarioIngresado = document.getElementById("usuarioadmin").value.trim();
+        const contraseñaIngresada = document.getElementById("contraseñaadmin").value;
+
+        try {
+          const querySnapshot = await db.collection("admin")
+            .where("usuarioadmin", "==", usuarioIngresado)
+            .where("contraseñaadmin", "==", contraseñaIngresada)
+            .get();
+
+            if (!querySnapshot.empty) {
+              mensajeError.textContent = "Inicio de sesión exitoso ✅";
+              mensajeError.style.color = "lightgreen";
+
+  
+              setTimeout(() => {
+                window.location.href = "/administrador/inicio.html";
+                }, 1000);
+              } else {
+                mensajeError.textContent = "Usuario o contraseña incorrectos.";
+                mensajeError.style.color = "orange";
+              }
+        } catch (error) {
+          console.error("Error al consultar Firestore:", error);
+          mensajeError.textContent = "Error al conectar con la base de datos.";
+          mensajeError.style.color = "red";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

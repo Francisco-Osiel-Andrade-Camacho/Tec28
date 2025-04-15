@@ -1,0 +1,104 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.book-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+/* Tarjetas de los libros */
+.book-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    width: calc(20% - 20px);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+/* Imagen del libro */
+.book-card img {
+    width: 80%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Título del libro */
+.book-card h3 {
+    font-size: 18px;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Información del libro */
+.book-card p {
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Efecto hover */
+.book-card:hover {
+    transform: scale(1.05);
+}
+
+/* Diseño responsivo */
+@media (max-width: 1024px) {
+    .book-card {
+        width: calc(25% - 10px); /* 3 libros por fila */
+    }
+}
+
+@media (max-width: 768px) {
+    .book-card {
+        width: calc(50% - 20px); /* 2 libros por fila */
+    }
+}
+
+@media (max-width: 480px) {
+    .book-card {
+        width: 100%; /* 1 libro por fila */
+    }
+}

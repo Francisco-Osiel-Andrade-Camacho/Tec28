@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="./css/style_login.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f0f0f5;
+    }
+    h2 {
+      color: #333;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .form-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      flex: 1;
+      min-width: 300px;
+    }
+    .form-card input, .form-card select {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 100%;
+    }
+    .form-card button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .form-card button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Administrador Tec28</h1>
+  <div class="container">
+    <!-- CRUD Libros -->
+    <div class="form-card">
+      <h2>Agregar Libro</h2>
+      <input type="text" id="nombreLibro" placeholder="Nombre del libro" required />
+      <input type="text" id="categoriaLibro" placeholder="Categoría" required />
+      <input type="text" id="editorialLibro" placeholder="Editorial" required />
+      <input type="text" id="autorLibro" placeholder="Autor" required />
+      <input type="url" id="linkPDF" placeholder="Enlace al archivo PDF" required />
+      <button onclick="agregarLibro()">Guardar Libro</button>
+      <p id="mensajeLibro"></p>
+    </div>
+
+    <!-- CRUD Usuarios -->
+    <div class="form-card">
+      <h2>Agregar Usuario</h2>
+      <input type="text" id="nuevoUsuario" placeholder="Usuario" required />
+      <input type="password" id="nuevaContraseña" placeholder="Contraseña" required />
+      <button onclick="agregarUsuario()">Guardar Usuario</button>
+      <p id="mensajeUsuario"></p>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+      authDomain: "btec28-143cf.firebaseapp.com",
+      projectId: "btec28-143cf",
+      storageBucket: "btec28-143cf.appspot.com",
+      messagingSenderId: "227942226048",
+      appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+      measurementId: "G-KMRHX6SZWN"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function agregarLibro() {
+      const nombre = document.getElementById("nombreLibro").value.trim();
+      const categoria = document.getElementById("categoriaLibro").value.trim();
+      const editorial = document.getElementById("editorialLibro").value.trim();
+      const autor = document.getElementById("autorLibro").value.trim();
+      const urlPDF = document.getElementById("linkPDF").value.trim();
+      const mensaje = document.getElementById("mensajeLibro");
+
+      if (!nombre || !categoria || !editorial || !autor || !urlPDF) {
+        mensaje.textContent = "Todos los campos son obligatorios.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        await db.collection("libros").add({
+          nombre,
+          categoria,
+          editorial,
+          autor,
+          archivoURL: urlPDF,
+          fecha: new Date()
+        });
+
+        mensaje.textContent = "Libro guardado con éxito.";
+        mensaje.style.color = "green";
+        document.getElementById("nombreLibro").value = "";
+        document.getElementById("categoriaLibro").value = "";
+        document.getElementById("editorialLibro").value = "";
+        document.getElementById("autorLibro").value = "";
+        document.getElementById("linkPDF").value = "";
+      } catch (error) {
+        console.error("Error al guardar libro:", error);
+        mensaje.textContent = "Error al guardar el libro.";
+        mensaje.style.color = "red";
+      }
+    }
+
+    async function agregarUsuario() {
+      const usuario = document.getElementById("nuevoUsuario").value.trim();
+      const contraseña = document.getElementById("nuevaContraseña").value.trim();
+      const mensaje = document.getElementById("mensajeUsuario");
+
+      if (!usuario || !contraseña) {
+        mensaje.textContent = "Completa ambos campos.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        await db.collection("usuarios").add({
+          id: usuario,
+          contraseña: contraseña
+        });
+
+        mensaje.textContent = "Usuario agregado correctamente.";
+        mensaje.style.color = "green";
+        document.getElementById("nuevoUsuario").value = "";
+        document.getElementById("nuevaContraseña").value = "";
+      } catch (error) {
+        console.error("Error al agregar usuario:", error);
+        mensaje.textContent = "Error al guardar el usuario.";
+        mensaje.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
