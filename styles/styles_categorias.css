@@ -1,60 +1,98 @@
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 20px;
-    }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+}
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+h1 {
+  text-align: center;
+  color: #333;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  table-layout: fixed;
+  word-wrap: break-word;
+}
 
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ccc;
-      text-align: left;
-    }
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
 
-    th {
-      background-color: #007bff;
-      color: white;
-    }
+th {
+  background-color: #007bff;
+  color: white;
+}
 
-    tr:hover {
-      background-color: #f1f1f1;
-    }
+tr:hover {
+  background-color: #f1f1f1;
+}
 
-    a.boton {
-      background-color: #28a745;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 5px;
-      text-decoration: none;
-    }
+a.boton {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
 
-    a.boton:hover {
-      background-color: #218838;
-    }
+a.boton:hover {
+  background-color: #218838;
+}
 
-    a.btn-inicio {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      text-decoration: none;
-    }
+a.btn-inicio {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
 
-    a.btn-inicio i {
-      margin-right: 8px;
-    }
+a.btn-inicio i {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  table {
+      font-size: 14px;
+  }
+
+  th, td {
+      padding: 10px;
+  }
+
+  a.boton, a.btn-inicio {
+      font-size: 14px;
+      padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+      margin: 10px;
+  }
+
+  table, th, td {
+      font-size: 12px;
+  }
+
+  a.boton, a.btn-inicio {
+      font-size: 13px;
+      padding: 6px 10px;
+  }
+}

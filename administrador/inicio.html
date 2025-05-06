@@ -1,3 +1,7 @@
+
+html
+Copy
+Edit
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,16 +16,20 @@
       margin: 20px;
       background-color: #f0f0f5;
     }
+
     h1, h2 {
       color: #000000;
       text-align: center;
     }
+
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 40px;
+      padding: 0 20px;
     }
+
     .form-card {
       background: white;
       border-radius: 12px;
@@ -32,7 +40,9 @@
       display: flex;
       flex-direction: column;
     }
-    .form-card input, .form-card select {
+
+    .form-card input,
+    .form-card select {
       margin: 12px 0;
       padding: 10px;
       width: 100%;
@@ -40,6 +50,7 @@
       border-radius: 6px;
       font-size: 14px;
     }
+
     .form-card button {
       background-color: #007bff;
       color: white;
@@ -50,16 +61,20 @@
       font-size: 16px;
       cursor: pointer;
     }
+
     .form-card button:hover {
       background-color: #0056b3;
     }
+
     #btnEliminarUsuario {
       background-color: #dc3545;
       margin-top: 10px;
     }
+
     #btnEliminarUsuario:hover {
       background-color: #c82333;
     }
+
     .btn-home {
       position: absolute;
       top: 20px;
@@ -76,19 +91,92 @@
       text-decoration: none;
       transition: background-color 0.3s ease;
     }
+
     .btn-home:hover {
       background-color: #18434b;
     }
+
     .btn-home i {
       font-style: normal;
     }
+
     p {
       margin: 10px 0 0;
       font-size: 14px;
       text-align: center;
     }
+
     hr {
       margin: 20px 0;
+    }
+
+    /* RESPONSIVE ADAPTATION */
+    @media (max-width: 768px) {
+      .form-card {
+        padding: 20px;
+      }
+
+      .form-card input,
+      .form-card select {
+        font-size: 15px;
+      }
+
+      .form-card button {
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      .btn-home {
+        font-size: 14px;
+        padding: 8px 16px;
+        top: 10px;
+        left: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        margin: 10px;
+      }
+
+      .container {
+        gap: 30px;
+        padding: 0 10px;
+      }
+
+      .form-card {
+        padding: 15px;
+      }
+
+      .form-card input,
+      .form-card select {
+        font-size: 14px;
+      }
+
+      .form-card button {
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      .btn-home {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
     }
   </style>
 </head>

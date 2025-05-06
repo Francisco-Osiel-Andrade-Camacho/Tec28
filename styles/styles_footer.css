@@ -8,6 +8,9 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
+    flex-wrap: wrap;
+    text-align: center;
+    gap: 10px;
 }
 
 #creditos-btn {
@@ -20,8 +23,21 @@ footer {
     border-radius: 5px;
     transition: 0.3s;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 #creditos-btn:hover {
     background-color: #ffdb4d;
+}
+
+@media (max-width: 600px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #creditos-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }
