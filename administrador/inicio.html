@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Administrador Btec28</title>
   <link rel="icon" href="/images/tec28.png" type="image/png">
-
   <link rel="stylesheet" href="./css/style_login.css" />
   <style>
     body {
@@ -103,7 +102,7 @@
     <div class="form-card">
       <h2>Agregar Libro</h2>
       <input type="text" id="nombreLibro" placeholder="Nombre del libro" required />
-      <select id="categoriaLibro" name="categoriaLibro">
+      <select id="categoriaLibro">
         <option value="">Selecciona una categoría</option>
         <option value="Historia">Historia</option>
         <option value="Ingles">Inglés</option>
@@ -142,11 +141,166 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
-  <!-- JavaScript funcionalidad -->
-  <!-- ... sin cambios en la lógica JavaScript ... -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnJDJVpHgUb9DerQJ7FTSHCSNT2HOjUxU",
+      authDomain: "btec28-143cf.firebaseapp.com",
+      projectId: "btec28-143cf",
+      storageBucket: "btec28-143cf.appspot.com",
+      messagingSenderId: "227942226048",
+      appId: "1:227942226048:web:75a26ea19fcbb75e962e65",
+      measurementId: "G-KMRHX6SZWN"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // LIBROS
+    async function agregarLibro() {
+      const nombre = document.getElementById("nombreLibro").value.trim();
+      const autor = document.getElementById("autorLibro").value.trim();
+      const categoria = document.getElementById("categoriaLibro").value.trim();
+      const editorial = document.getElementById("editorialLibro").value.trim();
+      const archivoURL = document.getElementById("linkPDF").value.trim();
+      const mensaje = document.getElementById("mensajeLibro");
+
+      if (!nombre || !autor || !categoria || !editorial || !archivoURL) {
+        mensaje.textContent = "Todos los campos son obligatorios.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        await db.collection("libros").add({
+          nombre,
+          autor,
+          categoria,
+          editorial,
+          archivoURL,
+          fecha: new Date()
+        });
+
+        mensaje.textContent = "Libro agregado con éxito.";
+        mensaje.style.color = "green";
+
+        document.getElementById("nombreLibro").value = "";
+        document.getElementById("autorLibro").value = "";
+        document.getElementById("categoriaLibro").value = "";
+        document.getElementById("editorialLibro").value = "";
+        document.getElementById("linkPDF").value = "";
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        mensaje.textContent = "Error al guardar en Firebase.";
+        mensaje.style.color = "red";
+      }
+    }
+
+    // USUARIOS
+    async function agregarUsuario() {
+      const nombre = document.getElementById("nombreUsuario").value.trim();
+      const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
+      const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
+      const matricula = document.getElementById("matriculaUsuario").value.trim();
+      const contraseña = document.getElementById("contraseñaUsuario").value.trim();
+      const mensaje = document.getElementById("mensajeUsuario");
+
+      if (!nombre || !apellidoPaterno || !apellidoMaterno || !matricula || !contraseña) {
+        mensaje.textContent = "Todos los campos son obligatorios.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        await db.collection("usuarios").doc(matricula).set({
+          nombre,
+          apellidoPaterno,
+          apellidoMaterno,
+          contraseña
+        });
+
+        mensaje.textContent = "Usuario guardado correctamente.";
+        mensaje.style.color = "green";
+
+        document.getElementById("nombreUsuario").value = "";
+        document.getElementById("apellidoPaterno").value = "";
+        document.getElementById("apellidoMaterno").value = "";
+        document.getElementById("matriculaUsuario").value = "";
+        document.getElementById("contraseñaUsuario").value = "";
+        document.getElementById("btnEliminarUsuario").disabled = true;
+      } catch (error) {
+        mensaje.textContent = "Error al guardar usuario.";
+        mensaje.style.color = "red";
+        console.error(error);
+      }
+    }
+
+    async function buscarUsuario() {
+      const matricula = document.getElementById("buscarMatricula").value.trim();
+      const mensaje = document.getElementById("mensajeBuscarUsuario");
+
+      if (!matricula) {
+        mensaje.textContent = "Introduce una matrícula.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        const doc = await db.collection("usuarios").doc(matricula).get();
+        if (doc.exists) {
+          const datos = doc.data();
+          document.getElementById("nombreUsuario").value = datos.nombre;
+          document.getElementById("apellidoPaterno").value = datos.apellidoPaterno;
+          document.getElementById("apellidoMaterno").value = datos.apellidoMaterno;
+          document.getElementById("matriculaUsuario").value = matricula;
+          document.getElementById("contraseñaUsuario").value = datos.contraseña;
+
+          document.getElementById("btnEliminarUsuario").disabled = false;
+          mensaje.textContent = "Usuario encontrado. Puedes editar o eliminar.";
+          mensaje.style.color = "green";
+        } else {
+          mensaje.textContent = "Usuario no encontrado.";
+          mensaje.style.color = "red";
+          document.getElementById("btnEliminarUsuario").disabled = true;
+        }
+      } catch (error) {
+        console.error("Error al buscar usuario:", error);
+        mensaje.textContent = "Error al buscar usuario.";
+        mensaje.style.color = "red";
+      }
+    }
+
+    async function eliminarUsuario() {
+      const matricula = document.getElementById("buscarMatricula").value.trim();
+      const mensaje = document.getElementById("mensajeBuscarUsuario");
+
+      if (!matricula) {
+        mensaje.textContent = "Introduce una matrícula para eliminar.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      try {
+        await db.collection("usuarios").doc(matricula).delete();
+        mensaje.textContent = "Usuario eliminado correctamente.";
+        mensaje.style.color = "green";
+
+        // Limpiar campos
+        document.getElementById("nombreUsuario").value = "";
+        document.getElementById("apellidoPaterno").value = "";
+        document.getElementById("apellidoMaterno").value = "";
+        document.getElementById("matriculaUsuario").value = "";
+        document.getElementById("contraseñaUsuario").value = "";
+        document.getElementById("buscarMatricula").value = "";
+        document.getElementById("btnEliminarUsuario").disabled = true;
+      } catch (error) {
+        mensaje.textContent = "Error al eliminar usuario.";
+        mensaje.style.color = "red";
+        console.error(error);
+      }
+    }
+  </script>
 </body>
 </html>
